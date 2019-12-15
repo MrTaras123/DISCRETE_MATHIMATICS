@@ -1,0 +1,111 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main()
+{
+  bool visited[30];int tmp, l;
+  for (int i = 0; i < 30; i++)
+  {
+    visited[i] = false;
+  }
+  int mas1[30][30];
+  int min[30],min1[30], min2[30];
+  for (int i = 0; i < 30; i++)
+  {
+    min[i] = 999;
+  }
+  ifstream in("Input.txt");
+  for (int i = 0; i < 30; i++)
+  {
+    for (int k = 0; k < 30; k++)
+    {
+      in >> mas1[i][k];
+      if (mas1[i][k] == 0) 
+      {
+        mas1[i][k] = 999;
+      }
+    }
+  }
+  int e, e1;
+  cout << "first: ";
+  cin >> e;
+  l = e-1;
+  cout << "second: ";
+  cin >> e1;
+  min[l] = 0;
+  mas1[l][l] = 0;
+  for (int u = 0; u < 30; u++)
+  {
+    for (int i = 0; i < 30; i++)
+    {
+      if ((min[i] > mas1[l][i]) && (visited[i] == false))
+      {
+        if (min[i] > (mas1[l][i] + min[l]))
+        {
+          min[i] = mas1[l][i] + min[l];
+        }
+      }
+    }
+    visited[l] = true;
+    for (int i = 0; i < 30; i++)
+    {
+      if (visited[i] == true)
+      {
+        min2[i] = 100;
+      }
+      else { min2[i] = min[i]; }
+    }
+    for (int j = 0; j < 29; j++) {
+      for (int i = 0; i < 29; i++) {
+        if (min2[i] > min2[i + 1])
+        {
+          tmp = min2[i];
+          min2[i] = min2[i + 1];
+          min2[i + 1] = tmp;
+        }
+      }
+    }
+    l = 0;
+    for (int i = 0; i < 30; i++)
+    {
+      if (visited[i] == false)
+      {
+        min1[i] = min[i];
+      }
+      else min1[i] = 100;
+    }
+    while (min2[0] != min1[l])
+    {
+      l++;
+    }
+  }
+  /*for (int i = 0; i < 30; i++)
+  {
+    if(visited[i]==true)cout << min[i] <<"-"<< endl;
+    else cout << min[i] << endl;
+  }*/
+  cout << "path: " << min[e1-1];
+  int way[30], temp= min[e1 - 1];
+  int t = 0,t1 = (e1 - 1);
+  for (int i = 0; i < 30; i++)
+  {
+    way[i] = 0;
+  }
+  for (int i = 0; i < 1000; i++)
+  {
+    if ((temp - mas1[t1][t]) == min[t])
+    {  
+      way[t] = t + 1;temp = min[t];t1 = t;t = 0;
+      
+      continue;
+    }
+    t++;
+    if (t == 30)break;
+  }
+    cout << endl;
+  for (int i = 0; i < 30; i++)
+  {
+    if (way[i]!= 0)cout << way[i] << "->";
+  }
+  cout << e1;
+}
